@@ -113,3 +113,13 @@ func (m *Map[K, V]) Walk(fn func (key K, value V) bool) {
 		}
   }
 }
+
+// Clear clears the map, removing all key-valie pairs in it.
+func (m *Map[K, V]) Clear() {
+	for k := range m.kv { // better than one loop since this is optimized by compiler
+		delete(m.kv, k)
+	}
+	for k:= range m.vk {
+		delete(m.vk, k)
+	}
+}
