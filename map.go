@@ -1,6 +1,20 @@
 // Package doublemap provides a generic Map[K comparable, V comparable] with operations for getting and setting
 // values by key, and the corresponding reverse map operation of getting and setting keys by values. The Map is
 // not thread-safe.
+//
+// Example usage:
+//     import "github.com/rasteric/doublemap"
+//
+//     func main() {
+//       m := doublemap.Map[string]int
+//       m.Set("hello", 1)
+//       m.Set("world", 2)
+//       m.SetByValue(3, "third")
+//       m.Walk(func(key string, value int) bool {
+//         fmt.Sprintf("%v, %v\n", key, value)
+//         return true // will stop if return false
+//       })
+//     }
 package doublemap
 
 // A Map stores keys and values in a way that makes reverse mapping from values to keys efficient at the
@@ -108,9 +122,9 @@ func (m Map[K, V]) Copy() Map[K, V] {
 	return m2
 }
 
-// Iterate traverses key-value pairs in the map and provides them to the given function in unspecified order
+// Walk traverses key-value pairs in the map and provides them to the given function in unspecified order
 // until the function returns false. 
-func (m Map[K, V]) Iterate(fn func (key K, value V) bool) {
+func (m Map[K, V]) Walk(fn func (key K, value V) bool) {
 	for k, v := range m.kv {
 		if !fn(k.(K), v.(V)) {
 			break
