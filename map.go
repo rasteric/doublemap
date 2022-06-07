@@ -26,12 +26,12 @@ type Map[K comparable,V comparable] struct {
 }
 
 func (m Map[K, V]) maybeInit() bool {
-	if m.kv == nil {
-		m.kv = make(map[any]any)
-		m.vk = make(map[any]any)
-		return true
+	if m.kv != nil {
+		return false
 	}
-	return false
+  m.kv = make(map[any]any)
+	m.vk = make(map[any]any)
+	return true
 }
 
 // Get returns the value for the given key and true, the null value of the value type and false if no value
