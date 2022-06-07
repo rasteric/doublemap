@@ -18,7 +18,7 @@ import (
 )
 
 func main() {
-	m := doublemap.New[string, int]()
+    m := doublemap.New[string, int]()
     m.Set("first", 1)
     m.Set("second", 2)
     m.Set("third", 3)
