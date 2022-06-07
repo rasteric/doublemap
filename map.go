@@ -28,26 +28,20 @@ package doublemap
 // cost of additional memory and storage complexity. You should only use this map if your values are unique
 // - otherwise the value-related lookup functions make no sense and Remove might have unexpected results!
 type Map[K comparable,V comparable] struct {
-	kv map[any]any
-	vk map[any]any
+	kv map[K]V
+	vk map[V]K
 }
 
 // New creates a new double map.
 func New[K, V comparable]() *Map[K, V] {
-	return &Map[K, V]{ kv: make(map[any]any), vk: make(map[any]any) }
+	return &Map[K, V]{ kv: make(map[K]V), vk: make(map[V]K) }
 }
 
 // Get returns the value for the given key and true, the null value of the value type and false if no value
 // was stored for this key.
 func (m *Map[K, V]) Get(key K) (V, bool) {
-  var result V
-	var ok bool
-	var x any
-	x, ok = m.kv[key]
-	if !ok {
-		return result, false
-	}
-	return x.(V), true
+  value, ok := m.kv[key]
+	return value, ok
 }
 
 // Set sets a value for the given key. 
@@ -71,14 +65,8 @@ func (m *Map[K, V]) Remove(key K) bool {
 // ByValue returns the key for a given value and true, the key type's null value and false if no key was
 // stored for this value.
 func (m *Map[K, V]) ByValue(value V) (K, bool) {
-	var result K
-	var ok bool
-	var x any
-	x, ok = m.vk[value]
-	if !ok {
-		return result, false
-  }
-	return x.(K), true
+	key, ok := m.vk[value]
+	return key, ok
 }
 
 // RemoveByValue removes a given key-value mapping by the given value. True is returned if the mapping has been
@@ -108,7 +96,7 @@ func (m *Map[K, V]) Copy() *Map[K, V] {
 // until the function returns false. 
 func (m *Map[K, V]) Walk(fn func (key K, value V) bool) {
 	for k, v := range m.kv {
-		if !fn(k.(K), v.(V)) {
+		if !fn(k, v) {
 			break
 		}
   }
