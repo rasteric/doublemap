@@ -1,6 +1,27 @@
 // Package doublemap provides a generic Map[K comparable, V comparable] with operations for getting and setting
 // values by key, and the corresponding reverse map operation of getting and setting keys by values. The Map is
 // not thread-safe.
+//
+// Quickstart:
+//
+//     package main
+//     
+//     import (
+//       "fmt"
+//    
+//       "github.com/rasteric/doublemap"
+//     )
+//     
+//     func main() {
+//         m := doublemap.New[string, int]()
+//         m.Set("first", 1)
+//         m.Set("second", 2)
+//         m.Set("third", 3)
+//         v, _ := m.Get("first")
+//         fmt.Println(v)
+//         k, _ := m.ByValue(3)
+//         fmt.Println(k)
+//     }
 package doublemap
 
 // A Map stores keys and values in a way that makes reverse mapping from values to keys efficient at the
