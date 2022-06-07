@@ -97,16 +97,6 @@ func (m Map[K, V]) RemoveByValue(value V) bool {
 	return false
 }
 
-// SetByValue sets the key for the given value, i.e., it is like Set but in reverse direction.
-func (m Map[K, V]) SetByValue(value V, key K) {
-	oldkey, ok := m.ByValue(value)
-	if ok {
-		m.Remove(oldkey)
-	}
-	m.kv[key] = value
-	m.vk[value] = key
-}
-
 // Copy creates a copy of the key-value mapping. This operation is fairly slow but faster than using Get and Set
 // manually. The copy is not deep, i.e., any key and values are just copied using ordinary assignment.
 func (m Map[K, V]) Copy() Map[K, V] {
