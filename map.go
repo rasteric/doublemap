@@ -1,5 +1,6 @@
 // Package doublemap provides a generic Map[K comparable, V comparable] with operations for getting and setting
-// values by key, and the corresponding reverse map operation of getting and setting keys by values.
+// values by key, and the corresponding reverse map operation of getting and setting keys by values. The Map is
+// not thread-safe.
 package doublemap
 
 // A Map stores keys and values in a way that makes reverse mapping from values to keys efficient at the
@@ -97,9 +98,22 @@ func (m Map[K, V]) SetByValue(value V, key K) {
 func (m Map[K, V]) Copy() Map[K, V] {
 	m2 := Map[K, V]{}
 	m2.maybeInit()
+	if m.maybeInit() {
+    return m2
+	}
 	for k, v := range m.kv {
 		m2.kv[k] = v
 		m2.vk[v] = k 
 	}
 	return m2
+}
+
+// Iterate traverses key-value pairs in the map and provides them to the given function in unspecified order
+// until the function returns false. 
+func (m Map[K, V]) Iterate(fn func (key K, value V) bool) {
+	for k, v := range m.kv {
+		if !fn(k.(K), v.(V)) {
+			break
+		}
+  }
 }
